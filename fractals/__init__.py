@@ -15,7 +15,7 @@ def mandel(c, max_iter=MAX_ITERATIONS):
         iterations = iterations + 1
     return iterations
 
-def generate_fractal(width, height, func, xmin=-1.5, xmax=1, ymin=-1, ymax=1, max_iter=MAX_ITERATIONS):
+def generate_fractal(width, height, func, xmin=-2, xmax=1, ymin=-1, ymax=1, max_iter=MAX_ITERATIONS):
     image = numpy.zeros((width, height), dtype=numpy.int64)
     xvals = numpy.linspace(xmin, xmax, width)
     yvals = numpy.linspace(ymin, ymax, height)
