@@ -68,3 +68,16 @@ def show_image(image, palette=None):
         for px in range(width):
             canvas.create_oval(px,py,px+1,(py+1),fill=palette[image[px,py]], outline=palette[image[px,py]])            
     window.mainloop()
+
+# Plot our image with matplotlib
+def show_image_matplotlib(image, palette=None):
+    import matplotlib.pyplot
+
+    im = numpy.flipud(numpy.rot90(image))
+
+    matplotlib.pyplot.axis('off')
+    if palette == None:
+        matplotlib.pyplot.imshow(im)
+    else:
+        matplotlib.pyplot.imshow(im, cmap=palette)
+    matplotlib.pyplot.show()

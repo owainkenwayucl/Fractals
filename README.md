@@ -43,9 +43,10 @@ for i in c:
 
 Here we can see an example where in order to allow arbitrary values in Julia functions, I have implemented a generic function `fractals.julia` and then written `fractals.generate_julia` which takes values of *c* and *n* and generates and returns an anonymous function based on `fractals.julia` which is based on those values so that it may be safely passed to `fractals.generate_fractal`.
 
-![Output of julia.py](img/julia1.png)
-![Output of julia.py](img/julia2.png)
-![Output of julia.py](img/julia3.png)
-![Output of julia.py](img/julia4.png)
-![Output of julia.py](img/julia5.png)
-![Output of julia.py](img/julia6.png)
+![First output of julia.py](img/julia1.png)
+
+The procedure `fractals.show_image` uses tkinter to display the image.  There is also a procedure `fractals.show_image_matplotlib` which uses Matplotlib to display the image.  The examples `mandelbrot-mpl.py` and `julia-mpl.py` use this method.
+
+![Matplotlib screenshot](img/mandel2.png)
+
+You can of course then save the plot from Matplotlib.
