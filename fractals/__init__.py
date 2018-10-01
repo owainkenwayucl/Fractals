@@ -4,8 +4,16 @@
 '''
 
 import numpy;
+import os;
 
 MAX_ITERATIONS=1000
+NEXT_PLOT_NUM=0
+
+# Have constantly updating filename
+def NEXT_PLOT():
+    global NEXT_PLOT_NUM
+    NEXT_PLOT_NUM += 1
+    return 'output' + os.sep + 'output_' + str(NEXT_PLOT_NUM)
 
 # Function for Mandelbrot sets.
 def mandel(c, max_iter=MAX_ITERATIONS):
@@ -85,3 +93,22 @@ def show_image_matplotlib(image_data, palette=None):
     else:
         matplotlib.pyplot.imshow(image, cmap=palette)
     matplotlib.pyplot.show()
+
+# Plot our image with matplotlib to a file
+def write_image_matplotlib(image_data, palette=None, filename=None):
+    import matplotlib.pyplot
+
+    image = numpy.flipud(numpy.rot90(image_data['image']))
+
+    matplotlib.pyplot.axis('off')
+    if palette == None:
+        matplotlib.pyplot.imshow(image)
+    else:
+        matplotlib.pyplot.imshow(image, cmap=palette)
+
+    if filename == None:
+        filename = NEXT_PLOT() + '.png'
+        
+
+    matplotlib.pyplot.savefig(filename, bbox_inches='tight')
+
