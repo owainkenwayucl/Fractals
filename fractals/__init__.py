@@ -31,13 +31,16 @@ def generate_julia(c, n):
 # Generate an image (numpy array) of iterations for a given size, function, range, and maximum iterations.
 def generate_fractal(width, height, func, xmin=-2, xmax=1, ymin=-1, ymax=1, max_iter=MAX_ITERATIONS):
     image = numpy.zeros((width, height), dtype=numpy.int64)
+    ret_val = {}
     xvals = numpy.linspace(xmin, xmax, width)
     yvals = numpy.linspace(ymin, ymax, height)
     for py in range(height):
         for px in range(width):
             c = xvals[px] + (1j*yvals[py])
             image[px,height - py - 1] = func(c,max_iter)
-    return image
+    ret_val['image'] = image
+    ret_val['depth'] = max_iter
+    return ret_val
 
 # generate a greyscale palette of colours for a given number of levels.
 def generate_greyscale_palette(levels):
@@ -51,14 +54,15 @@ def generate_greyscale_palette(levels):
     return palette    
 
 # Show a tkinter window containing a given image.
-def show_image(image, palette=None):
+def show_image(image_data, palette=None):
     import tkinter
 
+    image = image_data['image']
     width = image.shape[0]
     height = image.shape[1]
 
     if (palette == None):
-        palette = generate_greyscale_palette(numpy.amax(image) + 1)
+        palette = generate_greyscale_palette(image_data['depth'] + 1)
 
     window = tkinter.Tk()
     window.title("Fractal Image")
@@ -70,14 +74,14 @@ def show_image(image, palette=None):
     window.mainloop()
 
 # Plot our image with matplotlib
-def show_image_matplotlib(image, palette=None):
+def show_image_matplotlib(image_data, palette=None):
     import matplotlib.pyplot
 
-    im = numpy.flipud(numpy.rot90(image))
+    image = numpy.flipud(numpy.rot90(image_data['image']))
 
     matplotlib.pyplot.axis('off')
     if palette == None:
-        matplotlib.pyplot.imshow(im)
+        matplotlib.pyplot.imshow(image)
     else:
-        matplotlib.pyplot.imshow(im, cmap=palette)
+        matplotlib.pyplot.imshow(image, cmap=palette)
     matplotlib.pyplot.show()
