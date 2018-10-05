@@ -44,7 +44,9 @@ def generate_julia(c, n):
 
 # Generate an image (numpy array) of iterations for a given size, function, range, and maximum iterations.
 def generate_fractal(width, height, func, xmin=-2, xmax=1, ymin=-1, ymax=1, max_iter=MAX_ITERATIONS):
+    print('Generating...', end='', flush=True)
     image = numpy.zeros((width, height), dtype=numpy.int64)
+    progress_mask = numpy.ones((11), dtype=bool)
     ret_val = {}
     xvals = numpy.linspace(xmin, xmax, width)
     yvals = numpy.linspace(ymin, ymax, height)
@@ -52,8 +54,13 @@ def generate_fractal(width, height, func, xmin=-2, xmax=1, ymin=-1, ymax=1, max_
         for px in range(width):
             c = xvals[px] + (1j*yvals[py])
             image[px,height - py - 1] = func(c,max_iter)
+        prog = int(100 * (py/height))
+        if (prog  % 10 == 0) and (progress_mask[int(prog/10)]):
+            print(str(prog) + '%...', end='', flush=True)
+            progress_mask[int(prog/10)] = False
     ret_val['image'] = image
     ret_val['depth'] = max_iter + 1
+    print('done.')
     return ret_val
 
 # generate a greyscale palette of colours for a given number of levels.
@@ -106,17 +113,19 @@ def write_image_matplotlib(image_data, palette=None, filename=None):
 
     image = numpy.flipud(numpy.rot90(image_data['image']))
 
+    if filename == None:
+        filename = NEXT_PLOT('png')
+        
+    print('Writing ' + filename + '...', end='', flush=True)
     matplotlib.pyplot.axis('off')
     if palette == None:
         matplotlib.pyplot.imshow(image)
     else:
         matplotlib.pyplot.imshow(image, cmap=palette)
 
-    if filename == None:
-        filename = NEXT_PLOT('png')
-        
-
     matplotlib.pyplot.savefig(filename, bbox_inches='tight')
+    
+    print('done.')
 
 # Dump image to PGM file
 def write_image(image_data, palette=None, filename=None):
@@ -124,6 +133,8 @@ def write_image(image_data, palette=None, filename=None):
 
     if filename == None:
         filename = NEXT_PLOT('pgm')
+
+    print('Writing ' + filename + '...', end='', flush=True)
 
     width = image.shape[0]
     height = image.shape[1]
@@ -145,3 +156,5 @@ def write_image(image_data, palette=None, filename=None):
         f.write('\n')
         
     f.close()
+
+    print('done.')
