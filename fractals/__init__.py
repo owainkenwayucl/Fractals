@@ -10,10 +10,16 @@ MAX_ITERATIONS=1000
 NEXT_PLOT_NUM=0
 
 # Have constantly updating filename
-def NEXT_PLOT():
+def NEXT_PLOT(suffix=''):
     global NEXT_PLOT_NUM
     NEXT_PLOT_NUM += 1
-    return 'output' + os.sep + 'output_' + str(NEXT_PLOT_NUM)
+    dot_suffix = ''
+    if not suffix == '':
+        dot_suffix = '.' + suffix
+    ret_val = 'output' + os.sep + 'output_' + str(NEXT_PLOT_NUM) + dot_suffix
+    if os.path.isfile(ret_val):
+        return NEXT_PLOT(suffix)
+    return ret_val
 
 # Function for Mandelbrot sets.
 def mandel(c, max_iter=MAX_ITERATIONS):
@@ -107,7 +113,7 @@ def write_image_matplotlib(image_data, palette=None, filename=None):
         matplotlib.pyplot.imshow(image, cmap=palette)
 
     if filename == None:
-        filename = NEXT_PLOT() + '.png'
+        filename = NEXT_PLOT('png')
         
 
     matplotlib.pyplot.savefig(filename, bbox_inches='tight')
@@ -117,7 +123,7 @@ def write_image(image_data, palette=None, filename=None):
     image = image_data['image']
 
     if filename == None:
-        filename = NEXT_PLOT() + '.pgm'
+        filename = NEXT_PLOT('pgm')
 
     width = image.shape[0]
     height = image.shape[1]
