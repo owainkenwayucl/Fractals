@@ -106,3 +106,6 @@ venv.bak/
 # output files
 output/*.png
 output/*.pgm
+
+# junk
+junk/*
