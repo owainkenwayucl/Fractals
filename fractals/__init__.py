@@ -9,6 +9,9 @@ import os;
 MAX_ITERATIONS=1000
 NEXT_PLOT_NUM=0
 
+# Wether or not to output information to the terminal when running.
+PRINT_MESSAGES=True
+
 # Have constantly updating filename
 def NEXT_PLOT(suffix=''):
     global NEXT_PLOT_NUM
@@ -44,7 +47,8 @@ def generate_julia(c, n):
 
 # Generate an image (numpy array) of iterations for a given size, function, range, and maximum iterations.
 def generate_fractal(width, height, func, xmin=-2, xmax=1, ymin=-1, ymax=1, max_iter=MAX_ITERATIONS):
-    print('Generating...', end='', flush=True)
+    if PRINT_MESSAGES:
+        print('Generating...', end='', flush=True)
     image = numpy.zeros((width, height), dtype=numpy.int64)
     progress_mask = numpy.ones((11), dtype=bool)
     ret_val = {}
@@ -54,13 +58,15 @@ def generate_fractal(width, height, func, xmin=-2, xmax=1, ymin=-1, ymax=1, max_
         for px in range(width):
             c = xvals[px] + (1j*yvals[py])
             image[px,height - py - 1] = func(c,max_iter)
-        prog = int(100 * (py/height))
-        if (prog  % 10 == 0) and (progress_mask[int(prog/10)]):
-            print(str(prog) + '%...', end='', flush=True)
-            progress_mask[int(prog/10)] = False
+        if PRINT_MESSAGES:
+            prog = int(100 * (py/height))
+            if (prog  % 10 == 0) and (progress_mask[int(prog/10)]):
+                print(str(prog) + '%...', end='', flush=True)
+                progress_mask[int(prog/10)] = False
     ret_val['image'] = image
     ret_val['depth'] = max_iter + 1
-    print('done.')
+    if PRINT_MESSAGES:
+        print('done.')
     return ret_val
 
 # generate a greyscale palette of colours for a given number of levels.
@@ -116,7 +122,8 @@ def write_image_matplotlib(image_data, palette=None, filename=None):
     if filename == None:
         filename = NEXT_PLOT('png')
         
-    print('Writing ' + filename + '...', end='', flush=True)
+    if PRINT_MESSAGES:
+        print('Writing ' + filename + '...', end='', flush=True)
     matplotlib.pyplot.axis('off')
     if palette == None:
         matplotlib.pyplot.imshow(image)
@@ -125,7 +132,8 @@ def write_image_matplotlib(image_data, palette=None, filename=None):
 
     matplotlib.pyplot.savefig(filename, bbox_inches='tight')
     
-    print('done.')
+    if PRINT_MESSAGES:
+        print('done.')
 
 # Dump image to PGM file
 def write_image(image_data, palette=None, filename=None):
@@ -134,7 +142,8 @@ def write_image(image_data, palette=None, filename=None):
     if filename == None:
         filename = NEXT_PLOT('pgm')
 
-    print('Writing ' + filename + '...', end='', flush=True)
+    if PRINT_MESSAGES:
+        print('Writing ' + filename + '...', end='', flush=True)
 
     width = image.shape[0]
     height = image.shape[1]
@@ -157,4 +166,5 @@ def write_image(image_data, palette=None, filename=None):
         
     f.close()
 
-    print('done.')
+    if PRINT_MESSAGES:
+        print('done.')
