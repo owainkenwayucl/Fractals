@@ -2,14 +2,14 @@
 
 ## Generic Python code for generating and exploring fractals
 
-I have a lot of repos on Github for generating Mandelbrot sets (e.g. [various languages](https://github.com/owainkenwayucl/mandel), [OpenWatcom Fortran 77 for DOS](https://github.com/owainkenwayucl/mandel77), [FreeBASIC](https://github.com/owainkenwayucl/mandbas)) but those implementations have very rigidly stuck to a fairly inflexible way of doing things, don't use built in complext types etc.  The code in this repository for Python is designed to be a lot more flexible (but probably a lot slower) to test out some concepts for doing things.
+I have a lot of repos on Github for generating Mandelbrot sets (e.g. [various languages](https://github.com/owainkenwayucl/mandel), [OpenWatcom Fortran 77 for DOS](https://github.com/owainkenwayucl/mandel77), [FreeBASIC](https://github.com/owainkenwayucl/mandbas)) but those implementations have very rigidly stuck to a fairly inflexible way of doing things, don't use built in complex types etc.  The code in this repository for Python is designed to be a lot more flexible (but probably a lot slower) to test out some concepts for doing things.
 
 ## Goals
 
  * generic to do more than Mandelbrot, e.g. Julia sets [done]
  * use complex types [done]
  * use numpy where possible [ongoing]
- * graphical [done] and image output
+ * graphical [done] and image output [done]
  * parallelisation
 
  ## Examples
