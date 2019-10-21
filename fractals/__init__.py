@@ -5,6 +5,7 @@
 
 import numpy;
 import os;
+import numba;
 
 MAX_ITERATIONS=1000
 NEXT_PLOT_NUM=0
@@ -25,6 +26,7 @@ def NEXT_PLOT(suffix=''):
     return ret_val
 
 # Function for Mandelbrot sets.
+@numba.jit(nopython=True)
 def mandel(c, max_iter=MAX_ITERATIONS):
     iterations = 0
     z = 0 + 0j
@@ -34,6 +36,7 @@ def mandel(c, max_iter=MAX_ITERATIONS):
     return iterations
 
 # Generic function template for Julia sets.
+@numba.jit(nopython=True)
 def julia(z, c, n, max_iter=MAX_ITERATIONS):
     iterations = 0
     while (((numpy.absolute(z)) < 2) and (iterations < max_iter)):
