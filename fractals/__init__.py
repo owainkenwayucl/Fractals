@@ -1,6 +1,6 @@
 '''
    Tools for generating fractals.
-   Owain Kenway, 2018
+   Owain Kenway, 2019
 '''
 
 import numpy;
