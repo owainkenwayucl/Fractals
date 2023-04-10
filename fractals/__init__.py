@@ -35,42 +35,28 @@ def mandel(c, max_iter=MAX_ITERATIONS):
         iterations = iterations + 1
     return iterations
 
-# Generic function template for Julia sets.
-@numba.jit(nopython=True)
-def julia(z, c, n, max_iter=MAX_ITERATIONS):
-    iterations = 0
-    while (((numpy.absolute(z)) < 2) and (iterations < max_iter)):
-        z = (z**n) + c
-        iterations = iterations + 1
-    return iterations
-
 # Generator function for Julia set functions from given c, n.
 def generate_julia(c, n):
-    return lambda z,m : julia(z, c, n, max_iter=m)
+    @numba.jit(nopython=True)
+    def julia(z, max_iter=MAX_ITERATIONS):
+        iterations = 0
+        while (((numpy.absolute(z)) < 2) and (iterations < max_iter)):
+            z = (z**n) + c
+            iterations = iterations + 1
+        return iterations
+    return julia
 
 # Generate an image (numpy array) of iterations for a given size, function, range, and maximum iterations.
+@numba.jit(nopython=True, parallel=True, nogil=True)
 def generate_fractal(width, height, func, xmin=-2, xmax=1, ymin=-1, ymax=1, max_iter=MAX_ITERATIONS):
-    if PRINT_MESSAGES:
-        print('Generating...', end='', flush=True)
     image = numpy.zeros((width, height), dtype=numpy.int64)
-    progress_mask = numpy.ones((11), dtype=bool)
-    ret_val = {}
     xvals = numpy.linspace(xmin, xmax, width)
     yvals = numpy.linspace(ymin, ymax, height)
-    for py in range(height):
+    for py in numba.prange(height):
         for px in range(width):
             c = xvals[px] + (1j*yvals[py])
             image[px,height - py - 1] = func(c,max_iter)
-        if PRINT_MESSAGES:
-            prog = int(100 * (py/height))
-            if (prog  % 10 == 0) and (progress_mask[int(prog/10)]):
-                print(str(prog) + '%...', end='', flush=True)
-                progress_mask[int(prog/10)] = False
-    ret_val['image'] = image
-    ret_val['depth'] = max_iter + 1
-    if PRINT_MESSAGES:
-        print('done.')
-    return ret_val
+    return (image, max_iter + 1)
 
 # generate a greyscale palette of colours for a given number of levels.
 def generate_greyscale_palette(levels):
@@ -87,12 +73,12 @@ def generate_greyscale_palette(levels):
 def show_image(image_data, palette=None):
     import tkinter
 
-    image = image_data['image']
+    image = image_data[0]
     width = image.shape[0]
     height = image.shape[1]
 
     if (palette == None):
-        palette = generate_greyscale_palette(image_data['depth'])
+        palette = generate_greyscale_palette(image_data[1])
 
     window = tkinter.Tk()
     window.title("Fractal Image")
@@ -107,7 +93,7 @@ def show_image(image_data, palette=None):
 def show_image_matplotlib(image_data, palette=None):
     import matplotlib.pyplot
 
-    image = numpy.flipud(numpy.rot90(image_data['image']))
+    image = numpy.flipud(numpy.rot90(image_data[0]))
 
     matplotlib.pyplot.axis('off')
     if palette == None:
@@ -120,7 +106,7 @@ def show_image_matplotlib(image_data, palette=None):
 def write_image_matplotlib(image_data, palette=None, filename=None):
     import matplotlib.pyplot
 
-    image = numpy.flipud(numpy.rot90(image_data['image']))
+    image = numpy.flipud(numpy.rot90(image_data[0]))
 
     if filename == None:
         filename = NEXT_PLOT('png')
@@ -140,7 +126,7 @@ def write_image_matplotlib(image_data, palette=None, filename=None):
 
 # Dump image to PGM file
 def write_image(image_data, palette=None, filename=None):
-    image = image_data['image']
+    image = image_data[0]
 
     if filename == None:
         filename = NEXT_PLOT('pgm')
@@ -151,7 +137,7 @@ def write_image(image_data, palette=None, filename=None):
     width = image.shape[0]
     height = image.shape[1]
 
-    depth = image_data['depth']
+    depth = image_data[1]
 
     f = open(filename, 'w')
 
