@@ -39,7 +39,7 @@ def _main():
 	if args.func == "mandelbrot":
 		image = fractals.generate_fractal(args.width, args.height, fractals.mandel, xmin=args.xmin, xmax=args.xmax, ymin=args.ymin, ymax=args.ymax, max_iter=args.iters)
 	elif args.func == "julia":
-		j = fractals.generate_julia(args.julia_z, args.julia_n)
+		j = fractals.generate_julia(args.z, args.n)
 		image = fractals.generate_fractal(args.width, args.height, j, xmin=args.xmin, xmax=args.xmax, ymin=args.ymin, ymax=args.ymax, max_iter=args.iters)
 		
 	else:
