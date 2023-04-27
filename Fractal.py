@@ -22,7 +22,7 @@ def _main():
 	parser.add_argument("-f", "--func", metavar="func", type=str, help="Fractal function - valid options are mandelbrot, julia.", default="mandelbrot", choices=["mandelbrot", "julia"])
 
 # Output options
-	parser.add_argument("-d", "--display", metavar="display", type=str, help="Output style - valid options are tk, mpl, file.", default="tk", choices=["tk", "mpl", "file"])
+	parser.add_argument("-d", "--display", metavar="display", type=str, help="Output style - valid options are tk, mpl, file, mplfile.", default="tk", choices=["tk", "mpl", "file", "mplfile"])
 
 	parser.add_argument("-o", "--output", metavar="filename", type=str, help="Output file name.", default="output.pgm")
 
