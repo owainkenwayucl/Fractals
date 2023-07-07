@@ -1,11 +1,11 @@
 '''
    Tools for generating fractals.
-   Owain Kenway, 2019
+   Owain Kenway, 2023
 '''
 
-import numpy;
-import os;
-import numba;
+import numpy
+import os
+import numba
 
 MAX_ITERATIONS=1000
 NEXT_PLOT_NUM=0
@@ -101,6 +101,22 @@ def show_image_matplotlib(image_data, palette=None):
     else:
         matplotlib.pyplot.imshow(image, cmap=palette)
     matplotlib.pyplot.show()
+
+# Show image in terminal
+def show_image_termshow(image_data):
+    import fractals.termshow
+
+    image = image_data[0]
+    image_f = image.astype(numpy.float64)
+    maximum = numpy.max(image)
+    width = image.shape[0]
+    height = image.shape[1]
+
+    for j in range(height):
+        for i in range(width):
+            image_f[i,j] = image[i,j]/maximum
+
+    fractals.termshow.show(image_f)
 
 # Plot our image with matplotlib to a file
 def write_image_matplotlib(image_data, palette=None, filename=None):
