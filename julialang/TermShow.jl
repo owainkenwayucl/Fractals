@@ -19,7 +19,7 @@ module TermShow
 		end
 
 		for a in 1:num_colours
-       			pixels[a] = "\033[48;5:"*string(colours_int[a])*"m  \033[m"
+       			pixels[a] = "\033[48;5;"*string(colours_int[a])*"m  \033[m"
 		end
 
 		dimensions = size(image)
@@ -61,7 +61,7 @@ module TermShow
 			for x in 1:width
 				index1 = Int(floor(slice[x,1] * (num_colours-1))) + 1
 				index2 = Int(floor(slice[x,2] * (num_colours-1))) + 1
-				pixel = "\033[48;5:"*string(colours_int[index1])*"m\033[38;5:"*string(colours_int[index2])*"m▄\033[m"
+				pixel = "\033[48;5;"*string(colours_int[index1])*"m\033[38;5;"*string(colours_int[index2])*"m▄\033[m"
 				line = line*pixel
 			end
 			println(line)
@@ -73,7 +73,7 @@ module TermShow
 			slice = image[1:width,height:height]
 			for x in 1:width
 				index1 = Int(floor(slice[x,1] * (num_colours-1))) + 1
-				pixel = "\033[38;5:"*string(colours_int[index1])*"m▀\033[m"
+				pixel = "\033[38;5;"*string(colours_int[index1])*"m▀\033[m"
 				line = line*pixel
 			end
 			println(line)
