@@ -143,7 +143,7 @@ def write_image_matplotlib(image_data, palette=None, filename=None):
         print('done.')
 
 # Plot our image with matplotlib to a base64 encoded string
-def write_image_matplotlib(image_data, palette=None):
+def write_image_matplotlib_base64(image_data, palette=None):
     import matplotlib.pyplot
 
     image = numpy.flipud(numpy.rot90(image_data[0]))
