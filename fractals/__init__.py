@@ -149,9 +149,6 @@ def write_image_matplotlib_base64(image_data, palette=None):
     image = numpy.flipud(numpy.rot90(image_data[0]))
 
     buffer = io.BytesIO()
-
-    if filename == None:
-        filename = NEXT_PLOT('png')
         
     if PRINT_MESSAGES:
         print('Writing to in memory buffer ...', end='', flush=True)
