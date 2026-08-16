@@ -1,11 +1,13 @@
 '''
    Tools for generating fractals.
-   Owain Kenway, 2023
+   Owain Kenway, 2023, 2026
 '''
 
 import numpy
 import os
 import numba
+import io
+import base64
 
 MAX_ITERATIONS=1000
 NEXT_PLOT_NUM=0
@@ -139,6 +141,34 @@ def write_image_matplotlib(image_data, palette=None, filename=None):
     
     if PRINT_MESSAGES:
         print('done.')
+
+# Plot our image with matplotlib to a base64 encoded string
+def write_image_matplotlib(image_data, palette=None):
+    import matplotlib.pyplot
+
+    image = numpy.flipud(numpy.rot90(image_data[0]))
+
+    buffer = io.BytesIO()
+
+    if filename == None:
+        filename = NEXT_PLOT('png')
+        
+    if PRINT_MESSAGES:
+        print('Writing to in memory buffer ...', end='', flush=True)
+    matplotlib.pyplot.axis('off')
+    if palette == None:
+        matplotlib.pyplot.imshow(image)
+    else:
+        matplotlib.pyplot.imshow(image, cmap=palette)
+
+    matplotlib.pyplot.savefig(buffer, bbox_inches='tight')
+    
+    buffer.seek(0)
+
+    if PRINT_MESSAGES:
+        print('done.')
+
+    return base64.b64encode(buffer.getvalue()).decode('utf-8')
 
 # Dump image to PGM file
 def write_image(image_data, palette=None, filename=None):
