@@ -106,6 +106,10 @@ venv.bak/
 # output files
 output/*.png
 output/*.pgm
+output.*
 
 # junk
 junk/*
+
+# MacOS
+.DS_Store
